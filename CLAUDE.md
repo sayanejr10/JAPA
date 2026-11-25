@@ -24,16 +24,22 @@ sur son téléphone ou son PC et rafraîchit après chaque correction.
 - Ambiance : mélange "jeu vidéo / mission secrète" (base sombre) et touches africaines
   (motifs wax, couleurs chaudes). Les saisons sont présentées comme des cartes d'embarquement
   avec les codes d'aéroport : COO (Cotonou), LOS (Lagos), LHR (Londres), YYZ (Toronto).
+- Mentor : le joueur choisit un cousin ou une cousine et son prénom (liste ou saisie libre),
+  gardé dans le navigateur (localStorage, clé `japa.mentor`).
+- Format des scènes : façon **messagerie** (bulles WhatsApp) pour les échanges avec le mentor ;
+  **personnage illustré en grand + texte en bas façon jeu vidéo** pour les vraies missions sur place
+  (douane, taxi, marché...).
 
 ## Plan du MVP
 
-1. Squelette du projet et page d'accueil
-2. Écran de mission avec un dialogue écrit et fixe
+1. Squelette du projet et page d'accueil ✅
+2. Écran de mission avec un dialogue écrit et fixe (messagerie avec le mentor) ✅
 3. Le personnage répond grâce à l'IA (à l'écrit)
-4. Le joueur parle au micro (reconnaissance vocale)
-5. Le personnage répond à voix haute (synthèse vocale)
-6. Le cousin dans l'oreillette et ses 4 niveaux d'aide
-7. Le debrief et le Rewind
-8. Le score et la carte à partager
-9. Le paiement Mobile Money
-10. La mise en ligne
+4. La scène jeu vidéo : arrivée à l'aéroport de Lagos (décor + personnage illustrés et animés, avec l'IA)
+5. Le joueur parle au micro (reconnaissance vocale)
+6. Le personnage répond à voix haute (synthèse vocale)
+7. Le mentor dans l'oreillette et ses 4 niveaux d'aide
+8. Le debrief et le Rewind
+9. Le score et la carte à partager
+10. Le paiement Mobile Money
+11. La mise en ligne (serveur + clé d'API pour les testeurs extérieurs)

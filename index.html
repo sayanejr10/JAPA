@@ -244,6 +244,173 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 
 footer { font-family: var(--font-mono); font-size: .7rem; color: var(--muted); text-align: center; }
 
+/* ---------- Passeport : ligne mentor ---------- */
+.mentor-row {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: .92rem; color: #CFEDE7;
+}
+.mentor-row b { color: var(--ink); font-weight: 600; }
+.link-btn {
+  appearance: none; background: none; border: 1px solid rgba(207,237,231,.4); color: var(--ink); cursor: pointer;
+  font: inherit; font-size: .82rem; font-weight: 600; min-height: 36px; padding: 4px 12px; border-radius: 8px;
+}
+
+/* ---------- Avatars (illustrations simples) ---------- */
+.avatar {
+  --size: 56px; width: var(--size); height: var(--size); border-radius: 50%; flex: none;
+  display: grid; place-items: end center; overflow: hidden; position: relative;
+  background: var(--sun);
+  box-shadow: 0 0 0 3px var(--night), 0 0 0 5px var(--sun);
+}
+.avatar svg { width: 100%; height: 100%; display: block; }
+.avatar.f { background: var(--hibiscus); box-shadow: 0 0 0 3px var(--night), 0 0 0 5px var(--hibiscus); }
+
+/* ---------- Écran : choix du mentor ---------- */
+.screen-head { display: flex; flex-direction: column; gap: 10px; }
+.screen-head h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 7vw, 2rem); line-height: 1.08; margin: 0; text-wrap: balance; }
+.screen-head p { margin: 0; color: var(--muted); }
+.gender-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gender {
+  appearance: none; cursor: pointer; font: inherit; color: var(--ink);
+  background: var(--panel); border: 2px solid var(--line); border-radius: 16px; padding: 16px 10px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.gender .avatar { --size: 84px; }
+.gender b { font-family: var(--font-display); font-weight: 400; font-size: 1rem; }
+.gender[aria-pressed="true"] { border-color: var(--sun); background: var(--panel-2); transform: translateY(-2px); }
+.label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.names { display: flex; flex-wrap: wrap; gap: 8px; }
+.name-chip {
+  appearance: none; cursor: pointer; font: inherit; font-weight: 600; font-size: .95rem; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 999px; min-height: 44px; padding: 8px 16px;
+}
+.name-chip[aria-pressed="true"] { background: var(--sun); color: var(--night-2); border-color: var(--sun); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field input {
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; min-height: 48px; padding: 10px 14px; width: 100%;
+}
+.field input:focus-visible { outline: 3px solid var(--lagoon); outline-offset: 1px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* ---------- Écran : appel entrant ---------- */
+.call {
+  min-height: calc(100vh - 40px); display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  text-align: center; padding-block: 48px 32px;
+}
+.call-who { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.call .avatar { --size: 128px; }
+.ring-wrap { position: relative; display: grid; place-items: center; padding: 28px; }
+.ring-wrap::before, .ring-wrap::after {
+  content: ""; position: absolute; inset: 28px; border-radius: 50%; border: 2px solid var(--sun);
+  animation: ring 1.8s ease-out infinite;
+}
+.ring-wrap::after { animation-delay: .9s; }
+@keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.55); opacity: 0; } }
+.call-name { font-family: var(--font-display); font-size: 2rem; line-height: 1; }
+.call-sub { color: var(--muted); font-family: var(--font-mono); font-size: .85rem; }
+.call-actions { display: flex; gap: 56px; }
+.call-btn {
+  appearance: none; border: 0; cursor: pointer; width: 72px; height: 72px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+}
+.call-btn.no { background: #D93B4F; }
+.call-btn.yes { background: #1FAA62; animation: wiggle 1.2s ease-in-out infinite; }
+@keyframes wiggle { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-14deg); } 80% { transform: rotate(14deg); } 90% { transform: rotate(-8deg); } }
+.call-label { display: block; margin-top: 8px; font-size: .85rem; color: var(--muted); }
+.call-btn:focus-visible, .gender:focus-visible, .name-chip:focus-visible, .choice:focus-visible, .link-btn:focus-visible, .icon-btn:focus-visible { outline: 3px solid var(--lagoon); outline-offset: 3px; }
+
+/* ---------- Écran : messagerie ---------- */
+#chat.wrap { gap: 0; padding-block: 0; min-height: 100vh; }
+.chat-top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--night-2); border-bottom: 1px solid var(--line);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-left, 0px));
+  display: flex; flex-direction: column; gap: 10px;
+}
+.chat-head { display: flex; align-items: center; gap: 12px; }
+.chat-head .avatar { --size: 40px; box-shadow: none; }
+.chat-head .who { flex: 1; min-width: 0; }
+.chat-head .who b { display: block; font-weight: 700; }
+.chat-head .who span { font-size: .8rem; color: var(--lagoon); }
+.icon-btn {
+  appearance: none; border: 0; background: transparent; color: var(--ink); cursor: pointer;
+  width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; flex: none;
+}
+.gauge { display: flex; flex-direction: column; gap: 5px; }
+.gauge-label { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.gauge-label b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.gauge-track { height: 10px; border-radius: 999px; background: var(--panel-2); overflow: hidden; position: relative; }
+.gauge-fill {
+  position: absolute; inset: 0; transform-origin: left; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--lagoon), var(--sun) 55%, var(--hibiscus));
+  transition: transform .6s cubic-bezier(.2,.9,.3,1.2);
+}
+.gauge-mark { position: absolute; top: 0; bottom: 0; left: 70%; width: 2px; background: var(--ink); opacity: .6; }
+.gauge.shake { animation: shake .4s ease; }
+@keyframes shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+
+.messages {
+  flex: 1; display: flex; flex-direction: column; gap: 8px; padding-block: 18px 12px;
+}
+.msg { max-width: 84%; padding: 10px 14px; border-radius: 16px; font-size: 1rem; line-height: 1.4; animation: pop .22s ease-out both; overflow-wrap: anywhere; }
+@keyframes pop { from { transform: translateY(6px) scale(.97); } to { transform: none; } }
+.msg.mentor { align-self: flex-start; background: var(--panel-2); border-bottom-left-radius: 4px; }
+.msg.player { align-self: flex-end; background: #1E7A55; border-bottom-right-radius: 4px; }
+.msg.officer { align-self: flex-start; background: #2B1830; border: 1px solid var(--hibiscus); border-bottom-left-radius: 4px; }
+.msg .tag-officer { display: block; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--hibiscus); margin-bottom: 4px; }
+.msg .en { font-weight: 600; font-size: 1.05rem; }
+.msg .fr { display: block; font-size: .85rem; color: var(--muted); margin-top: 3px; }
+.msg.player .fr { color: #BFE8D6; }
+.msg.system {
+  align-self: center; max-width: 92%; text-align: center; background: transparent; border: 1px dashed var(--line);
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sun);
+}
+.typing { align-self: flex-start; background: var(--panel-2); border-radius: 16px; padding: 12px 14px; display: flex; gap: 4px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: dot 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; }
+.typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.choices {
+  position: sticky; bottom: 0; z-index: 4;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 12px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px));
+  background: var(--night-2); border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.choices-label { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.choice {
+  appearance: none; cursor: pointer; text-align: left; font: inherit; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px; min-height: 52px; padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 2px; transition: border-color .12s ease, background .12s ease;
+}
+.choice:hover { border-color: var(--sun); }
+.choice:active { background: var(--panel-2); }
+.choice .en { font-weight: 600; font-size: 1.02rem; }
+.choice .fr { font-size: .82rem; color: var(--muted); }
+
+/* ---------- Écran : fin de mission ---------- */
+.result { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.result .stamp { font-size: 1.15rem; }
+.result.win .stamp { color: var(--lagoon); border-color: var(--lagoon); }
+.result h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.6rem, 7.5vw, 2.1rem); margin: 0; line-height: 1.08; }
+.result p { margin: 0; color: var(--muted); }
+.recap { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.recap-item { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.recap-q { font-family: var(--font-mono); font-size: .74rem; color: var(--muted); }
+.recap-a { display: flex; gap: 8px; align-items: baseline; }
+.verdict { flex: none; font-family: var(--font-mono); font-weight: 700; font-size: .66rem; letter-spacing: .08em; padding: 2px 6px; border-radius: 4px; }
+.verdict.good { background: rgba(44,194,175,.18); color: var(--lagoon); }
+.verdict.meh { background: rgba(255,182,39,.18); color: var(--sun); }
+.verdict.bad { background: rgba(240,71,111,.18); color: var(--hibiscus); }
+.recap-best { font-size: .88rem; color: var(--muted); }
+.recap-best b { color: var(--ink); }
+.end-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; justify-content: center; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
@@ -293,6 +460,10 @@ footer { font-family: var(--font-mono); font-size: .7rem; color: var(--muted); t
       <div class="stat"><span>Phrases</span><b>0</b></div>
       <div class="stat"><span>Tampons</span><b>0</b></div>
     </div>
+    <div class="mentor-row">
+      <span>Mentor : <b id="home-mentor">pas encore choisi</b></span>
+      <button class="link-btn" id="change-mentor" type="button">Choisir</button>
+    </div>
     <div class="mrz" aria-hidden="true">P&lt;BENVOYAGEUR&lt;&lt;001&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
   </section>
 
@@ -305,18 +476,109 @@ footer { font-family: var(--font-mono); font-size: .7rem; color: var(--muted); t
   </section>
 
   <div class="wax thin" aria-hidden="true"></div>
-  <footer>Japa · prototype · étape 1</footer>
+  <footer>Japa · prototype · étape 2</footer>
 </main>
 
-<!-- ÉCRAN 2 : MISSION (bientôt) -->
-<main id="mission" class="wrap" hidden>
-  <button class="back" id="back-btn" type="button">← Retour</button>
+<!-- ÉCRAN 2 : CHOIX DU MENTOR -->
+<main id="setup" class="wrap" hidden>
+  <button class="back" id="setup-back" type="button">← Retour</button>
+  <div class="screen-head">
+    <span class="eyebrow">Saison 0 · Avant le départ</span>
+    <h1>Qui va te préparer au départ ?</h1>
+    <p>Ton mentor vit déjà à l'étranger. Il ou elle t'accompagnera pendant toute l'aventure.</p>
+  </div>
+
+  <div class="gender-grid">
+    <button class="gender" type="button" data-gender="m" aria-pressed="false">
+      <span class="avatar" data-avatar="m"></span>
+      <b>Un cousin</b>
+    </button>
+    <button class="gender" type="button" data-gender="f" aria-pressed="false">
+      <span class="avatar f" data-avatar="f"></span>
+      <b>Une cousine</b>
+    </button>
+  </div>
+
+  <div class="field" id="names-block" hidden>
+    <span class="label">Son prénom</span>
+    <div class="names" id="names"></div>
+  </div>
+
+  <div class="field" id="custom-block" hidden>
+    <label class="label" for="custom-name">Écris son prénom</label>
+    <input id="custom-name" type="text" maxlength="16" autocomplete="off" placeholder="Ex. : Bénédicte">
+  </div>
+
+  <button class="btn" id="setup-ok" type="button" disabled>
+    <span id="setup-ok-text">Choisis ton mentor</span>
+    <span class="arrow" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </button>
+</main>
+
+<!-- ÉCRAN 3 : APPEL ENTRANT -->
+<main id="call" class="wrap call" hidden>
+  <div class="call-who">
+    <span class="call-sub">Appel entrant · +234 Lagos</span>
+    <div class="ring-wrap"><span class="avatar" id="call-avatar"></span></div>
+    <span class="call-name" id="call-name"></span>
+    <span class="call-sub" id="call-rel"></span>
+  </div>
+  <div class="call-actions">
+    <div>
+      <button class="call-btn no" id="call-no" type="button" aria-label="Refuser l'appel">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="transform: rotate(135deg)"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+      </button>
+      <span class="call-label">Refuser</span>
+    </div>
+    <div>
+      <button class="call-btn yes" id="call-yes" type="button" aria-label="Décrocher">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+      </button>
+      <span class="call-label">Décrocher</span>
+    </div>
+  </div>
+</main>
+
+<!-- ÉCRAN 4 : MESSAGERIE -->
+<main id="chat" class="wrap" hidden>
+  <div class="chat-top">
+    <div class="chat-head">
+      <button class="icon-btn" id="chat-back" type="button" aria-label="Quitter la mission">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <span class="avatar" id="chat-avatar"></span>
+      <div class="who"><b id="chat-name"></b><span id="chat-status">en ligne</span></div>
+    </div>
+    <div class="gauge" id="gauge" hidden>
+      <div class="gauge-label"><span>Méfiance du douanier</span><b id="gauge-value">0 %</b></div>
+      <div class="gauge-track"><div class="gauge-fill" id="gauge-fill"></div><div class="gauge-mark" title="Seuil : contrôle approfondi"></div></div>
+    </div>
+  </div>
+  <div class="messages" id="messages" aria-live="polite"></div>
+  <div class="choices" id="choices" hidden></div>
+</main>
+
+<!-- ÉCRAN 5 : FIN DE MISSION -->
+<main id="end" class="wrap" hidden>
   <div class="wax" aria-hidden="true"></div>
-  <div class="dossier">
-    <span class="eyebrow">Saison 0 · Mission 1 · COO</span>
-    <h1>Le coup de fil du cousin</h1>
-    <p>Ton cousin, installé à l'étranger, t'appelle depuis Lagos. Il va t'apprendre tes premières phrases de survie avant le grand départ.</p>
-    <span class="stamp">Bientôt</span>
+  <div class="result" id="result">
+    <span class="eyebrow">Saison 0 · Mission 1 · Entraînement douane</span>
+    <span class="stamp" id="end-stamp"></span>
+    <h1 id="end-title"></h1>
+    <p id="end-text"></p>
+    <span class="label">Tes réponses</span>
+    <div class="recap" id="recap"></div>
+    <div class="end-actions">
+      <button class="btn" id="end-replay" type="button">
+        Rejouer la mission
+        <span class="arrow" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        </span>
+      </button>
+      <button class="btn ghost" id="end-home" type="button">Retour à l'accueil</button>
+    </div>
   </div>
 </main>
 
@@ -364,7 +626,7 @@ function renderPasses() {
   box.querySelectorAll(".pass").forEach(btn => {
     btn.addEventListener("click", () => {
       const s = SEASONS[Number(btn.dataset.id)];
-      if (s.open) showScreen("mission");
+      if (s.open) startMission();
       else showToast(`Termine la saison ${s.id - 1} pour débloquer « ${s.title} ».`);
     });
   });
@@ -413,9 +675,9 @@ setInterval(() => {
 }, 3200);
 
 // ---------- Navigation ----------
+const SCREENS = ["home", "setup", "call", "chat", "end"];
 function showScreen(name) {
-  document.getElementById("home").hidden = name !== "home";
-  document.getElementById("mission").hidden = name !== "mission";
+  SCREENS.forEach(id => { document.getElementById(id).hidden = id !== name; });
   window.scrollTo(0, 0);
 }
 
@@ -428,7 +690,384 @@ function showToast(msg) {
   toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
 }
 
-document.getElementById("start-btn").addEventListener("click", () => showScreen("mission"));
-document.getElementById("back-btn").addEventListener("click", () => showScreen("home"));
+// ---------- Mentor (gardé sur le téléphone du joueur) ----------
+const NAMES = {
+  m: ["Sèdjro", "Koffi", "Rodrigue", "Ulrich", "Mawuli"],
+  f: ["Afi", "Mariam", "Nadège", "Carine", "Gloria"],
+};
+let mentor = null; // { gender: "m" | "f", name: "Afi" }
+try { mentor = JSON.parse(localStorage.getItem("japa.mentor")); } catch (e) { mentor = null; }
+
+function saveMentor(m) {
+  mentor = m;
+  try { localStorage.setItem("japa.mentor", JSON.stringify(m)); } catch (e) { /* stockage indisponible : on garde en mémoire */ }
+  refreshMentorUI();
+}
+
+// Petites illustrations : cousin (cheveux courts) / cousine (gele, le foulard de tête)
+const AVATAR_SVG = {
+  m: `<svg viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M12 100 q0-32 38-32 q38 0 38 32z" fill="#110E22"/>
+        <path d="M40 66 h20 v10 q-10 6 -20 0z" fill="#5A321E"/>
+        <circle cx="50" cy="46" r="20" fill="#6B3E26"/>
+        <path d="M30 44 a20 20 0 0 1 40 0 q-6-9-20-9 q-14 0-20 9z" fill="#1A1214"/>
+        <path d="M30 86 l20 10 l20 -10" stroke="#FFB627" stroke-width="4" fill="none"/>
+      </svg>`,
+  f: `<svg viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M12 100 q0-32 38-32 q38 0 38 32z" fill="#110E22"/>
+        <path d="M40 66 h20 v10 q-10 6 -20 0z" fill="#5A321E"/>
+        <circle cx="50" cy="48" r="19" fill="#6B3E26"/>
+        <path d="M24 42 q-4-26 26-28 q30 2 26 28 q-10-10-26-8 q-16-2-26 8z" fill="#FFB627"/>
+        <path d="M30 30 q20-8 40 0 M27 37 q23-9 46 0" stroke="#110E22" stroke-width="2.5" fill="none"/>
+        <circle cx="70" cy="20" r="7" fill="#2CC2AF"/>
+        <circle cx="60" cy="56" r="2.5" fill="#FFB627"/>
+      </svg>`,
+};
+function paintAvatar(el, gender) {
+  el.innerHTML = AVATAR_SVG[gender];
+  el.classList.toggle("f", gender === "f");
+}
+document.querySelectorAll("[data-avatar]").forEach(el => paintAvatar(el, el.dataset.avatar));
+
+function refreshMentorUI() {
+  document.getElementById("home-mentor").textContent = mentor ? `${mentor.name} (${mentor.gender === "f" ? "ta cousine" : "ton cousin"})` : "pas encore choisi";
+  document.getElementById("change-mentor").textContent = mentor ? "Changer" : "Choisir";
+}
+
+// ---------- Écran : choix du mentor ----------
+let draft = { gender: null, name: null, custom: false };
+let setupNext = "call"; // où aller après le choix : l'appel, ou retour à l'accueil
+
+function openSetup(next) {
+  setupNext = next;
+  draft = mentor ? { gender: mentor.gender, name: mentor.name, custom: !NAMES[mentor.gender].includes(mentor.name) } : { gender: null, name: null, custom: false };
+  document.getElementById("custom-name").value = draft.custom ? draft.name : "";
+  renderSetup();
+  showScreen("setup");
+}
+
+function renderSetup() {
+  document.querySelectorAll(".gender").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.gender === draft.gender)));
+  const namesBlock = document.getElementById("names-block");
+  namesBlock.hidden = !draft.gender;
+  document.getElementById("custom-block").hidden = !draft.custom;
+  const box = document.getElementById("names");
+  box.innerHTML = "";
+  if (draft.gender) {
+    [...NAMES[draft.gender], "Autre…"].forEach(n => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "name-chip";
+      b.textContent = n;
+      const isOther = n === "Autre…";
+      b.setAttribute("aria-pressed", String(isOther ? draft.custom : (!draft.custom && draft.name === n)));
+      b.addEventListener("click", () => {
+        if (isOther) {
+          draft.custom = true;
+          draft.name = document.getElementById("custom-name").value.trim() || null;
+          renderSetup();
+          document.getElementById("custom-name").focus();
+        } else {
+          draft.custom = false;
+          draft.name = n;
+          renderSetup();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+  const ok = document.getElementById("setup-ok");
+  ok.disabled = !(draft.gender && draft.name);
+  document.getElementById("setup-ok-text").textContent =
+    !draft.gender ? "Choisis ton mentor"
+    : !draft.name ? "Choisis un prénom"
+    : `C'est ${draft.gender === "f" ? "ma cousine" : "mon cousin"} ${draft.name}`;
+}
+
+document.querySelectorAll(".gender").forEach(b => b.addEventListener("click", () => {
+  if (draft.gender !== b.dataset.gender) { draft.gender = b.dataset.gender; draft.name = null; draft.custom = false; }
+  renderSetup();
+}));
+document.getElementById("custom-name").addEventListener("input", e => {
+  draft.name = e.target.value.trim() || null;
+  const ok = document.getElementById("setup-ok");
+  ok.disabled = !(draft.gender && draft.name);
+  document.getElementById("setup-ok-text").textContent = draft.name
+    ? `C'est ${draft.gender === "f" ? "ma cousine" : "mon cousin"} ${draft.name}` : "Écris un prénom";
+});
+document.getElementById("setup-ok").addEventListener("click", () => {
+  if (!(draft.gender && draft.name)) return;
+  saveMentor({ gender: draft.gender, name: draft.name });
+  if (setupNext === "call") openCall(); else showScreen("home");
+});
+document.getElementById("setup-back").addEventListener("click", () => showScreen("home"));
+
+// ---------- Écran : appel entrant ----------
+function openCall() {
+  paintAvatar(document.getElementById("call-avatar"), mentor.gender);
+  document.getElementById("call-name").textContent = mentor.name;
+  document.getElementById("call-rel").textContent = mentor.gender === "f" ? "Ta cousine" : "Ton cousin";
+  showScreen("call");
+}
+document.getElementById("call-no").addEventListener("click", () => {
+  showScreen("home");
+  showToast(`${mentor.name} te rappellera. Ne ${mentor.gender === "f" ? "la" : "le"} fais pas trop attendre !`);
+});
+document.getElementById("call-yes").addEventListener("click", () => startChat());
+
+function startMission() {
+  if (mentor) openCall(); else openSetup("call");
+}
+
+// ---------- La mission (dialogue fixe) ----------
+// Chaque réponse a un niveau : good (bonne), meh (maladroite), bad (hors sujet), et fait monter la méfiance.
+const CUSTOMS = [
+  {
+    q: "Good morning. Passport, please.", qfr: "Bonjour. Votre passeport, s'il vous plaît.",
+    answers: [
+      { en: "Good morning. Here you are.", fr: "Bonjour. Le voici.", level: "good", sus: 0,
+        react: "Parfait ! « Here you are », c'est « le voici ». Poli et simple." },
+      { en: "Yes, passport.", fr: "Oui, passeport.", level: "meh", sus: 20,
+        react: "Ça passe, mais c'est un peu sec. Dis plutôt « Here you are »." },
+      { en: "I am fine, thank you.", fr: "Je vais bien, merci.", level: "bad", sus: 35,
+        react: "Oups ! Il ne t'a pas demandé comment tu vas. Il veut ton passeport." },
+    ],
+  },
+  {
+    q: "What is the purpose of your visit?", qfr: "Quel est le but de votre visite ?",
+    answers: [
+      { en: "I'm here on business.", fr: "Je suis ici pour affaires.", level: "good", sus: 0,
+        react: "Exactement. Court et précis, c'est ce que les douaniers aiment." },
+      { en: "I come for make business.", fr: "Je viens pour faire business.", level: "meh", sus: 20,
+        react: "On te comprend, mais ça sonne « franglais ». Un natif dirait : « I'm here on business »." },
+      { en: "Yes, I like Nigeria.", fr: "Oui, j'aime le Nigeria.", level: "bad", sus: 35,
+        react: "Il t'a demandé POURQUOI tu viens. Une réponse à côté, ça rend méfiant." },
+    ],
+  },
+  {
+    q: "How long will you stay?", qfr: "Combien de temps allez-vous rester ?",
+    answers: [
+      { en: "Two weeks.", fr: "Deux semaines.", level: "good", sus: 0,
+        react: "Clair et net. Une durée précise, ça rassure." },
+      { en: "Maybe long time, I don't know.", fr: "Peut-être longtemps, je ne sais pas.", level: "meh", sus: 25,
+        react: "« Je ne sais pas » à la douane, ça inquiète. Donne toujours une durée précise." },
+      { en: "In a hotel.", fr: "Dans un hôtel.", level: "bad", sus: 35,
+        react: "Il demande COMBIEN DE TEMPS, pas OÙ. Par exemple : « Two weeks »." },
+    ],
+  },
+];
+const FAIL_AT = 70; // à partir de 70 % de méfiance : contrôle approfondi
+
+let runId = 0;          // permet d'arrêter proprement une mission si on la quitte
+let suspicion = 0;
+let history = [];
+
+const reduce = reduceMotion;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms, 150) : ms));
+const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(p => p[1]);
+const msgBox = () => document.getElementById("messages");
+const scrollDown = () => window.scrollTo({ top: document.body.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+
+function addMsg(kind, parts) {
+  const d = document.createElement("div");
+  d.className = `msg ${kind}`;
+  if (kind === "officer") {
+    const t = document.createElement("span");
+    t.className = "tag-officer";
+    t.textContent = `Douanier · joué par ${mentor.name}`;
+    d.appendChild(t);
+  }
+  if (parts.en) {
+    const en = document.createElement("span");
+    en.className = "en";
+    en.textContent = parts.en;
+    d.appendChild(en);
+    if (parts.fr) {
+      const fr = document.createElement("span");
+      fr.className = "fr";
+      fr.textContent = parts.fr;
+      d.appendChild(fr);
+    }
+  } else {
+    d.textContent = parts.text;
+  }
+  msgBox().appendChild(d);
+  scrollDown();
+}
+
+// Le mentor "écrit" puis envoie le message
+async function say(kind, parts, myRun) {
+  const length = (parts.text || parts.en || "").length;
+  const typing = document.createElement("div");
+  typing.className = "typing";
+  typing.innerHTML = "<i></i><i></i><i></i>";
+  typing.setAttribute("aria-label", `${mentor.name} écrit…`);
+  msgBox().appendChild(typing);
+  document.getElementById("chat-status").textContent = "écrit…";
+  scrollDown();
+  await sleep(500 + Math.min(length * 18, 1100));
+  typing.remove();
+  document.getElementById("chat-status").textContent = "en ligne";
+  if (myRun !== runId) throw new Error("stop");
+  addMsg(kind, parts);
+  await sleep(250);
+}
+
+// Affiche des boutons de réponse et attend le choix du joueur
+function ask(label, options, myRun) {
+  return new Promise((resolve, reject) => {
+    if (myRun !== runId) return reject(new Error("stop"));
+    const box = document.getElementById("choices");
+    box.innerHTML = "";
+    const l = document.createElement("span");
+    l.className = "choices-label";
+    l.textContent = label;
+    box.appendChild(l);
+    options.forEach(opt => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "choice";
+      const en = document.createElement("span");
+      en.className = "en";
+      en.textContent = opt.en || opt.text;
+      b.appendChild(en);
+      if (opt.fr) {
+        const fr = document.createElement("span");
+        fr.className = "fr";
+        fr.textContent = opt.fr;
+        b.appendChild(fr);
+      }
+      b.addEventListener("click", () => {
+        box.hidden = true;
+        addMsg("player", opt.en ? { en: opt.en, fr: opt.fr } : { text: opt.text });
+        resolve(opt);
+      });
+      box.appendChild(b);
+    });
+    box.hidden = false;
+    scrollDown();
+  });
+}
+
+function setGauge(value) {
+  suspicion = Math.min(100, value);
+  document.getElementById("gauge-fill").style.transform = `scaleX(${suspicion / 100})`;
+  document.getElementById("gauge-value").textContent = `${suspicion} %`;
+}
+function shakeGauge() {
+  const g = document.getElementById("gauge");
+  g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake");
+}
+
+async function startChat() {
+  const myRun = ++runId;
+  suspicion = 0; history = [];
+  paintAvatar(document.getElementById("chat-avatar"), mentor.gender);
+  document.getElementById("chat-name").textContent = mentor.name;
+  document.getElementById("messages").innerHTML = "";
+  document.getElementById("choices").hidden = true;
+  document.getElementById("gauge").hidden = true;
+  setGauge(0);
+  showScreen("chat");
+
+  const n = mentor.name;
+  const f = mentor.gender === "f";
+  try {
+    await say("mentor", { text: `Allô ! C'est ${n} 👋` }, myRun);
+    await say("mentor", { text: "Alors c'est vrai ? Tu veux partir à Lagos ?" }, myRun);
+    const first = await ask("Ta réponse", [
+      { text: "Oui, c'est décidé !" },
+      { text: "Oui… mais je ne parle pas anglais 😬" },
+    ], myRun);
+    if (first.text.startsWith("Oui, c'est")) {
+      await say("mentor", { text: "J'adore ! Mais à Lagos, tout se passe en anglais. Alors on va s'entraîner." }, myRun);
+    } else {
+      await say("mentor", { text: "Pas de panique, c'est pour ça que je suis là. On commence doucement." }, myRun);
+    }
+    await say("mentor", { text: "Première épreuve à l'arrivée : la douane de l'aéroport." }, myRun);
+    await say("mentor", { text: `Je vais jouer le douanier. Réponds-moi comme si c'était vrai. Je te mets la traduction en dessous.` }, myRun);
+    await say("mentor", { text: "Attention : chaque mauvaise réponse fait monter sa méfiance. Si elle dépasse la barre blanche, c'est le contrôle approfondi 😅" }, myRun);
+
+    document.getElementById("gauge").hidden = false;
+    addMsg("system", { text: `${n} joue maintenant le douanier` });
+    await sleep(500);
+
+    for (const step of CUSTOMS) {
+      await say("officer", { en: step.q, fr: step.qfr }, myRun);
+      const pick = await ask("Choisis ta réponse, puis dis-la à voix haute", shuffle(step.answers), myRun);
+      history.push({ step, pick });
+      if (pick.sus > 0) { setGauge(suspicion + pick.sus); shakeGauge(); }
+      await sleep(400);
+      await say("mentor", { text: (pick.level === "good" ? "✅ " : pick.level === "meh" ? "⚠️ " : "❌ ") + pick.react }, myRun);
+    }
+
+    const win = suspicion < FAIL_AT;
+    if (win) {
+      await say("officer", { en: "Welcome to Nigeria. Enjoy your stay.", fr: "Bienvenue au Nigeria. Bon séjour." }, myRun);
+      await say("mentor", { text: `Bravo ! Tu as passé la douane 🎉 Je suis fi${f ? "ère" : "er"} de toi.` }, myRun);
+    } else {
+      await say("officer", { en: "Please step aside. Follow me.", fr: "Mettez-vous sur le côté. Suivez-moi." }, myRun);
+      await say("mentor", { text: "Aïe… contrôle approfondi. Pas grave, c'est l'entraînement. On recommence ?" }, myRun);
+    }
+    await sleep(1200);
+    if (myRun !== runId) return;
+    showEnd(win);
+  } catch (e) {
+    if (e.message !== "stop") throw e;
+  }
+}
+
+document.getElementById("chat-back").addEventListener("click", () => {
+  runId++; // arrête la mission en cours
+  showScreen("home");
+});
+
+// ---------- Écran : fin de mission ----------
+function showEnd(win) {
+  const result = document.getElementById("result");
+  result.classList.toggle("win", win);
+  document.getElementById("end-stamp").textContent = win ? "Admis" : "Contrôle approfondi";
+  document.getElementById("end-title").textContent = win ? "Mission réussie !" : "Mission ratée";
+  document.getElementById("end-text").textContent = win
+    ? `Méfiance finale : ${suspicion} %. Tu as passé la douane d'entraînement avec ${mentor.name}.`
+    : `Méfiance finale : ${suspicion} %. Le douanier t'a mis de côté. Regarde les bonnes réponses et rejoue.`;
+
+  const recap = document.getElementById("recap");
+  recap.innerHTML = "";
+  const LABEL = { good: "BIEN", meh: "BOF", bad: "RATÉ" };
+  history.forEach(({ step, pick }) => {
+    const best = step.answers.find(a => a.level === "good");
+    const item = document.createElement("div");
+    item.className = "recap-item";
+    const q = document.createElement("span");
+    q.className = "recap-q";
+    q.textContent = step.q;
+    const a = document.createElement("div");
+    a.className = "recap-a";
+    const v = document.createElement("span");
+    v.className = `verdict ${pick.level}`;
+    v.textContent = LABEL[pick.level];
+    const said = document.createElement("span");
+    said.textContent = `« ${pick.en} »`;
+    a.append(v, said);
+    item.append(q, a);
+    if (pick.level !== "good") {
+      const b = document.createElement("span");
+      b.className = "recap-best";
+      b.innerHTML = "Mieux : <b></b>";
+      b.querySelector("b").textContent = best.en;
+      item.appendChild(b);
+    }
+    recap.appendChild(item);
+  });
+  showScreen("end");
+}
+document.getElementById("end-replay").addEventListener("click", () => startChat());
+document.getElementById("end-home").addEventListener("click", () => showScreen("home"));
+
+// ---------- Accueil ----------
+document.getElementById("start-btn").addEventListener("click", startMission);
+document.getElementById("change-mentor").addEventListener("click", () => openSetup("home"));
+refreshMentorUI();
 renderPasses();
 </script>
