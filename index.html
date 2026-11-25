@@ -1,0 +1,434 @@
+<title>Japa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Outfit:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout : une colonne mobile. Tableau des départs (split-flap) en ouverture, passeport du joueur,
+   puis l'itinéraire en cartes d'embarquement perforées. Thème unique sombre (choix délibéré :
+   "mission de nuit"), lettrage inspiré des enseignes peintes et des danfos de Lagos (Bungee). */
+:root {
+  --night: #110E22;
+  --night-2: #0B0918;
+  --panel: #1B1734;
+  --panel-2: #241F45;
+  --line: #3A3366;
+  --ink: #F6EFE3;
+  --muted: #ABA4C7;
+  --sun: #FFB627;
+  --sun-deep: #C9810A;
+  --hibiscus: #F0476F;
+  --lagoon: #2CC2AF;
+  --font-display: "Bungee", "Arial Black", Impact, sans-serif;
+  --font-shade: "Bungee Shade", "Bungee", "Arial Black", sans-serif;
+  --font-body: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "Courier New", monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(120% 60% at 85% -10%, rgba(255,182,39,.16), transparent 60%),
+    radial-gradient(90% 50% at -10% 30%, rgba(240,71,111,.10), transparent 60%),
+    var(--night);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 560px; margin: 0 auto; padding-block: 18px 56px; display: flex; flex-direction: column; gap: 30px; }
+
+/* ---------- Ruban wax ---------- */
+.wax {
+  height: 22px; border-radius: 4px;
+  background-color: var(--hibiscus);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22' viewBox='0 0 44 22'%3E%3Crect width='44' height='22' fill='%23F0476F'/%3E%3Cpath d='M0 11 L11 0 L22 11 L11 22Z' fill='%23FFB627'/%3E%3Cpath d='M5 11 L11 5 L17 11 L11 17Z' fill='%23110E22'/%3E%3Ccircle cx='11' cy='11' r='2.4' fill='%232CC2AF'/%3E%3Ccircle cx='33' cy='11' r='7' fill='none' stroke='%23110E22' stroke-width='2.5'/%3E%3Ccircle cx='33' cy='11' r='3' fill='%23F6EFE3'/%3E%3C/svg%3E");
+  background-size: 44px 22px;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.15);
+}
+.wax.thin { height: 10px; background-size: 20px 10px; }
+
+/* ---------- En-tête ---------- */
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-word {
+  font-family: var(--font-shade); font-size: 2rem; line-height: 1; color: var(--sun); letter-spacing: .02em;
+}
+.coins {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-weight: 700; font-size: .85rem;
+  background: var(--panel); border: 1px solid var(--line); padding: 6px 12px 6px 6px; border-radius: 999px;
+}
+.coin {
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--sun); color: var(--night); font-family: var(--font-display); font-size: .65rem;
+  box-shadow: inset 0 -2px 0 var(--sun-deep);
+}
+
+/* ---------- Tableau des départs ---------- */
+.board {
+  background: var(--night-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,.6);
+}
+.board-head {
+  display: flex; justify-content: space-between; gap: 10px;
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.board-head .live { color: var(--lagoon); display: inline-flex; align-items: center; gap: 6px; }
+.board-head .live::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lagoon);
+  animation: blink 1.4s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+.flaps { display: flex; gap: 4px; justify-content: center; }
+.flap {
+  flex: 1 1 0; max-width: 46px; aspect-ratio: 3 / 4;
+  display: grid; place-items: center; position: relative;
+  background: linear-gradient(#262040 0 49%, #1E1935 51% 100%);
+  border-radius: 5px;
+  font-family: var(--font-display); font-size: clamp(1.1rem, 6.4vw, 1.7rem); color: var(--sun);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,.4);
+}
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
+.flap.flip { animation: flip .14s ease-in; }
+@keyframes flip { 0% { transform: scaleY(1); } 50% { transform: scaleY(.15); } 100% { transform: scaleY(1); } }
+.board-foot {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  font-family: var(--font-mono); font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+}
+.board-foot b { display: block; color: var(--ink); font-size: .85rem; letter-spacing: .02em; }
+
+/* ---------- Accroche ---------- */
+.hero { display: flex; flex-direction: column; gap: 16px; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 400; margin: 0;
+  font-size: clamp(2rem, 9.5vw, 3rem); line-height: 1.02; text-wrap: balance;
+}
+.hero h1 .hl { color: var(--sun); display: inline-block; transform: rotate(-2deg); }
+.hero p { margin: 0; color: var(--muted); font-size: 1.08rem; max-width: 40ch; }
+.hero p strong { color: var(--ink); font-weight: 600; }
+
+.btn {
+  appearance: none; border: 2px solid var(--night-2); cursor: pointer;
+  font-family: var(--font-display); font-size: 1.05rem; letter-spacing: .02em;
+  background: var(--sun); color: var(--night-2);
+  min-height: 56px; padding: 14px 22px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  box-shadow: 0 6px 0 var(--sun-deep), 0 14px 30px -10px rgba(255,182,39,.55);
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--sun-deep); }
+.btn .arrow {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--night-2); color: var(--sun);
+  display: grid; place-items: center; flex: none;
+}
+.hint { font-size: .92rem; color: var(--muted); text-align: center; margin: 0; }
+
+/* ---------- Passeport du joueur ---------- */
+.passport {
+  background: linear-gradient(160deg, #1F4B47 0%, #163633 100%);
+  border-radius: 16px; padding: 18px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 14px;
+  border: 1px solid rgba(44,194,175,.35);
+}
+.passport::before {
+  content: ""; position: absolute; right: -40px; top: -40px; width: 170px; height: 170px; border-radius: 50%;
+  border: 14px double rgba(255,182,39,.18);
+}
+.passport-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: relative; }
+.passport-label { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: #9ED9CF; }
+.passport-name { font-family: var(--font-display); font-size: 1.25rem; margin-top: 2px; }
+.level {
+  font-family: var(--font-display); font-size: .75rem; color: var(--night-2); background: var(--lagoon);
+  padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+}
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; position: relative; }
+.stat { background: rgba(0,0,0,.22); border-radius: 10px; padding: 10px; min-width: 0; }
+.stat span { display: block; font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: #9ED9CF; }
+.stat b { font-family: var(--font-display); font-weight: 400; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.mrz {
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: rgba(246,239,227,.55);
+  white-space: nowrap; overflow: hidden; text-overflow: clip; position: relative;
+}
+
+/* ---------- Itinéraire : cartes d'embarquement ---------- */
+.section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.section-title h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.2rem; margin: 0; }
+.section-title span { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); }
+.passes { display: flex; flex-direction: column; gap: 24px; margin-top: 26px; }
+
+.pass {
+  appearance: none; text-align: left; width: 100%; font: inherit; color: inherit; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+  display: grid; grid-template-columns: 1fr 86px; position: relative;
+  transition: transform .15s ease, border-color .15s ease;
+  animation: rise .45s cubic-bezier(.2,.9,.3,1.3) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+.pass:hover { transform: translateY(-2px); }
+.pass-main { padding: 16px 14px 16px 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.pass-stub {
+  position: relative; padding: 14px 10px; border-left: 2px dashed var(--line);
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--font-mono); font-size: .65rem; color: var(--muted); text-align: center;
+}
+/* encoches de perforation */
+.pass-stub::before, .pass-stub::after {
+  content: ""; position: absolute; left: -12px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--night); border: 1px solid var(--line);
+}
+.pass-stub::before { top: -12px; }
+.pass-stub::after { bottom: -12px; }
+.pass-stub .num { font-family: var(--font-display); font-size: 2rem; line-height: 1; color: var(--ink); }
+.barcode {
+  width: 100%; height: 28px; border-radius: 2px;
+  background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 8px, var(--ink) 8px 11px, transparent 11px 12px);
+  opacity: .8;
+}
+.route { display: flex; align-items: center; gap: 10px; }
+.iata { font-family: var(--font-display); font-size: 1.55rem; line-height: 1; }
+.iata small { display: block; font-family: var(--font-body); font-size: .72rem; color: var(--muted); margin-top: 4px; letter-spacing: 0; }
+.route .path { flex: 1; min-width: 20px; height: 2px; background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px); position: relative; align-self: center; margin-top: -14px; }
+.route .path svg { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(90deg); color: var(--sun); background: var(--panel); padding: 0 2px; }
+.pass-title { font-family: var(--font-body); font-weight: 700; font-size: 1.1rem; margin: 0; }
+.pass-desc { margin: 0; color: var(--muted); font-size: .93rem; }
+.chip {
+  align-self: flex-start; font-family: var(--font-mono); font-weight: 700; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: 5px 9px; border-radius: 4px; background: var(--sun); color: var(--night-2);
+}
+
+.pass.open { background: var(--panel-2); border-color: var(--sun); box-shadow: 0 0 0 1px var(--sun), 0 18px 34px -18px rgba(255,182,39,.5); }
+.pass.open .pass-stub::before, .pass.open .pass-stub::after { border-color: var(--sun); }
+.pass.locked .pass-main, .pass.locked .num, .pass.locked .barcode { opacity: .45; }
+.pass.locked .iata { color: var(--muted); }
+.lock { width: 22px; height: 22px; color: var(--muted); }
+
+.btn:focus-visible, .pass:focus-visible, .back:focus-visible { outline: 3px solid var(--lagoon); outline-offset: 3px; }
+
+/* ---------- Écran mission (bientôt) ---------- */
+.back {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer;
+  font: inherit; font-weight: 500; font-size: .95rem; min-height: 44px; padding: 8px 16px; border-radius: 12px; align-self: flex-start;
+}
+.dossier {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px 18px;
+  display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden;
+}
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.dossier h1 { font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; margin: 0; line-height: 1.1; }
+.dossier p { margin: 0; color: var(--muted); }
+.stamp {
+  align-self: flex-start; font-family: var(--font-display); font-size: 1rem; letter-spacing: .08em;
+  color: var(--hibiscus); border: 3px solid var(--hibiscus); padding: 6px 14px; border-radius: 8px; transform: rotate(-6deg);
+  animation: stamp .35s cubic-bezier(.2,1.6,.4,1) both .15s;
+}
+@keyframes stamp { from { transform: rotate(-6deg) scale(1.8); } to { transform: rotate(-6deg) scale(1); } }
+
+/* ---------- Message flottant ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--night-2); font-weight: 600; font-size: .95rem;
+  padding: 12px 16px; border-radius: 12px; width: max-content; max-width: calc(100vw - 32px); text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5); z-index: 20;
+}
+
+footer { font-family: var(--font-mono); font-size: .7rem; color: var(--muted); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<!-- ÉCRAN 1 : ACCUEIL -->
+<main id="home" class="wrap">
+  <header>
+    <div class="logo"><span class="logo-word">JAPA</span></div>
+    <span class="coins" aria-label="Pièces : 50">
+      <span class="coin" aria-hidden="true">J</span>50
+    </span>
+  </header>
+
+  <section class="board" aria-label="Tableau des départs">
+    <div class="board-head"><span>Départs · Cotonou</span><span class="live">En direct</span></div>
+    <div class="flaps" id="flaps" aria-live="off"></div>
+    <div class="board-foot">
+      <span>Vol<b>JP-001</b></span>
+      <span>Porte<b>S0</b></span>
+      <span>Statut<b id="board-status">Embarque</b></span>
+    </div>
+  </section>
+
+  <section class="hero">
+    <h1>Ton anglais, c'est ton <span class="hl">passeport.</span></h1>
+    <p>Pas de cours. <strong>Une aventure.</strong> Tu parles à voix haute, les personnages réagissent, et chaque mission réussie te rapproche du départ.</p>
+    <button class="btn" id="start-btn" type="button">
+      Commencer la Saison 0
+      <span class="arrow" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </button>
+    <p class="hint">Zéro anglais ? Ton cousin te souffle tout.</p>
+  </section>
+
+  <section class="passport" aria-label="Ton passeport">
+    <div class="passport-top">
+      <div>
+        <div class="passport-label">Passeport du joueur</div>
+        <div class="passport-name">Voyageur 001</div>
+      </div>
+      <span class="level">Niv. 0 · Guidé</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Missions</span><b>0/5</b></div>
+      <div class="stat"><span>Phrases</span><b>0</b></div>
+      <div class="stat"><span>Tampons</span><b>0</b></div>
+    </div>
+    <div class="mrz" aria-hidden="true">P&lt;BENVOYAGEUR&lt;&lt;001&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Ton itinéraire</h2>
+      <span>4 saisons · 20 missions</span>
+    </div>
+    <div class="passes" id="passes"></div>
+  </section>
+
+  <div class="wax thin" aria-hidden="true"></div>
+  <footer>Japa · prototype · étape 1</footer>
+</main>
+
+<!-- ÉCRAN 2 : MISSION (bientôt) -->
+<main id="mission" class="wrap" hidden>
+  <button class="back" id="back-btn" type="button">← Retour</button>
+  <div class="wax" aria-hidden="true"></div>
+  <div class="dossier">
+    <span class="eyebrow">Saison 0 · Mission 1 · COO</span>
+    <h1>Le coup de fil du cousin</h1>
+    <p>Ton cousin, installé à l'étranger, t'appelle depuis Lagos. Il va t'apprendre tes premières phrases de survie avant le grand départ.</p>
+    <span class="stamp">Bientôt</span>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+// ---------- Données des saisons ----------
+const SEASONS = [
+  { id: 0, from: "COO", fromCity: "Cotonou", to: null, title: "Avant le départ",
+    desc: "Ton cousin te prépare. Parfait si tu pars de zéro.", missions: 5, open: true, chip: "Embarquement" },
+  { id: 1, from: "COO", fromCity: "Cotonou", to: "LOS", toCity: "Lagos", title: "Lagos Hustle",
+    desc: "Douane, taxi, marché, négociation avec un fournisseur.", missions: 5, open: false },
+  { id: 2, from: "LOS", fromCity: "Lagos", to: "LHR", toCity: "Londres", title: "London Student",
+    desc: "Logement, banque, premier cours, colocataires.", missions: 5, open: false },
+  { id: 3, from: "LHR", fromCity: "Londres", to: "YYZ", toCity: "Toronto", title: "Toronto Job",
+    desc: "Entretien, premier jour au bureau, conflit au travail.", missions: 5, open: false },
+];
+
+const planeIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>';
+const lockIcon = '<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Verrouillé"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+
+function renderPasses() {
+  const box = document.getElementById("passes");
+  box.innerHTML = SEASONS.map((s, i) => {
+    const from = `<span class="iata">${s.from}<small>${s.fromCity}</small></span>`;
+    const route = s.to
+      ? `${from}<span class="path">${planeIcon}</span><span class="iata">${s.to}<small>${s.toCity}</small></span>`
+      : from;
+    return `
+      <button class="pass ${s.open ? "open" : "locked"}" type="button" data-id="${s.id}" style="--i:${i}">
+        <div class="pass-main">
+          <div class="route">${route}</div>
+          <h3 class="pass-title">${s.title}</h3>
+          <p class="pass-desc">${s.desc}</p>
+          ${s.open ? `<span class="chip">${s.chip}</span>` : ""}
+        </div>
+        <div class="pass-stub">
+          <span>SAISON</span>
+          <span class="num">${s.id}</span>
+          ${s.open ? `<span class="barcode" aria-hidden="true"></span><span>${s.missions} missions</span>` : lockIcon}
+        </div>
+      </button>`;
+  }).join("");
+
+  box.querySelectorAll(".pass").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const s = SEASONS[Number(btn.dataset.id)];
+      if (s.open) showScreen("mission");
+      else showToast(`Termine la saison ${s.id - 1} pour débloquer « ${s.title} ».`);
+    });
+  });
+}
+
+// ---------- Tableau des départs (effet split-flap) ----------
+const DESTINATIONS = [
+  { word: "LAGOS",   status: "Saison 1" },
+  { word: "LONDON",  status: "Saison 2" },
+  { word: "TORONTO", status: "Saison 3" },
+];
+const SLOTS = 7;
+const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const flapsEl = document.getElementById("flaps");
+const flaps = Array.from({ length: SLOTS }, () => {
+  const d = document.createElement("span");
+  d.className = "flap";
+  d.setAttribute("aria-hidden", "true");
+  flapsEl.appendChild(d);
+  return d;
+});
+
+function setWord(word, status) {
+  const padded = word.padEnd(SLOTS, " ");
+  flapsEl.setAttribute("aria-label", word);
+  document.getElementById("board-status").textContent = status;
+  flaps.forEach((el, i) => {
+    const target = padded[i];
+    if (reduceMotion) { el.textContent = target; return; }
+    let n = 3 + i; // chaque case tourne un peu plus longtemps que la précédente
+    const tick = () => {
+      el.classList.remove("flip"); void el.offsetWidth; el.classList.add("flip");
+      if (n-- > 0) { el.textContent = ALPHA[Math.floor(Math.random() * 26)]; setTimeout(tick, 70); }
+      else el.textContent = target;
+    };
+    tick();
+  });
+}
+
+let destIndex = 0;
+setWord(DESTINATIONS[0].word, DESTINATIONS[0].status);
+setInterval(() => {
+  destIndex = (destIndex + 1) % DESTINATIONS.length;
+  setWord(DESTINATIONS[destIndex].word, DESTINATIONS[destIndex].status);
+}, 3200);
+
+// ---------- Navigation ----------
+function showScreen(name) {
+  document.getElementById("home").hidden = name !== "home";
+  document.getElementById("mission").hidden = name !== "mission";
+  window.scrollTo(0, 0);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+}
+
+document.getElementById("start-btn").addEventListener("click", () => showScreen("mission"));
+document.getElementById("back-btn").addEventListener("click", () => showScreen("home"));
+renderPasses();
+</script>
