@@ -21,9 +21,14 @@ sur son téléphone ou son PC et rafraîchit après chaque correction.
 ## Choix de design
 
 - Mobile d'abord (public principalement sur téléphone).
-- Ambiance : mélange "jeu vidéo / mission secrète" (base sombre) et touches africaines
-  (motifs wax, couleurs chaudes). Les saisons sont présentées comme des cartes d'embarquement
-  avec les codes d'aéroport : COO (Cotonou), LOS (Lagos), LHR (Londres), YYZ (Toronto).
+- Direction artistique « Ciel de départ » (inspirée de reallifeglobal.com, demandée par l'utilisateur) :
+  lumineuse et rassurante. Bandeau en dégradé bleu #0E5E9C → #1C93CF → turquoise #2CCFCB,
+  sections blanches, un mot du titre en couleur (menthe #B3FFE0 sur bleu, bleu #1C8AD8 sur blanc),
+  boutons orange #F7782B avec ombre, cartes blanches à ombres douces, titres de rubriques colorés
+  (turquoise #10B894, orange, bleu). Polices : Montserrat (titres), Lato (texte).
+  Accueil : téléphone qui montre une vraie mission, vague, rubriques d'atouts, passeport, cartes d'embarquement.
+  Illustrations en aplats et ombres, sans contours épais ; pas d'emojis comme icônes.
+  Saisons = cartes d'embarquement : COO (Cotonou), LOS (Lagos), LHR (Londres), YYZ (Toronto).
 - Mentor : le joueur choisit un cousin ou une cousine et son prénom (liste ou saisie libre),
   gardé dans le navigateur (localStorage, clé `japa.mentor`).
 - Format des scènes : façon **messagerie** (bulles WhatsApp) pour les échanges avec le mentor ;
