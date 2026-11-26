@@ -34,7 +34,7 @@ sur son téléphone ou son PC et rafraîchit après chaque correction.
 
 1. Squelette du projet et page d'accueil ✅
 2. Écran de mission avec un dialogue écrit et fixe (messagerie avec le mentor) ✅
-3. Le personnage répond grâce à l'IA (à l'écrit)
+3. Le personnage répond grâce à l'IA (à l'écrit) ✅
 4. La scène jeu vidéo : arrivée à l'aéroport de Lagos (décor + personnage illustrés et animés, avec l'IA)
 5. Le joueur parle au micro (reconnaissance vocale)
 6. Le personnage répond à voix haute (synthèse vocale)
